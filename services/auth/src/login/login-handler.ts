@@ -1,10 +1,10 @@
 import { createHandler } from '@app/http/handlers';
-import { getUser, UserKeys } from 'apps/services/users/src/user.model';
 import { httpError, httpResponse } from '@app/http/response';
 import { createJWT } from '../auth.utils';
 import { schemaValidator } from '@app/http/schema-validator.middleware';
 import { object, string } from 'yup';
 import { BodyParams } from '@app/http/types';
+import { getUser, UserKeys } from '@app/users/user.model';
 
 type Params = BodyParams<{ email: string; }>;
 

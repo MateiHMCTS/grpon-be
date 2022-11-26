@@ -38,6 +38,17 @@ const serverlessConfig: Partial<Serverless> = {
         },
       ],
     },
+    'login': {
+      handler: 'src/login/login-handler.main',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'auth/login',
+          },
+        },
+      ],
+    },
   },
 };
 
