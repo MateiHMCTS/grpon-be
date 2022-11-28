@@ -1,0 +1,29 @@
+type Mutation {
+  createTodo(
+    id: ID!
+    title: String!
+    completed: Boolean!
+  ): Todo!
+}
+
+type Query {
+  getTodos(filter: String): [Todo!]!
+}
+
+type Subscription {
+  addTodos: Todo
+    @aws_subscribe(mutations: ["createTodo"])
+}
+
+type Todo {
+  id: ID
+  title: String
+  completed: Boolean
+  entityType: String
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}

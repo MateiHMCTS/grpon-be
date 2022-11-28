@@ -1,0 +1,15 @@
+{
+    "version" : "2022-05-29",
+    "operation" : "PutItem",
+        "key": {
+      		"SK" : {"S": "TODO#$util.autoId()"},
+      		"PK" : {"S": "$util.autoId()"}
+        },
+        "attributeValues" : {
+          "id": {"S": "$util.autoId()"},
+          "title"    : $util.dynamodb.toDynamoDBJson($ctx.args.title),
+          "completed" : $util.dynamodb.toDynamoDBJson($ctx.args.completed),
+          "entityType" : {"S": "TODO"}
+        },
+        "_versio  n" : 1
+}

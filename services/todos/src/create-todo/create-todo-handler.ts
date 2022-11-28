@@ -9,23 +9,24 @@ import { object, string } from 'yup';
 
 type Params = BodyParams<{ title: string }>;
 
-export const main = createProtectedHandler<Params>(async (event, context) => {
-  const userKeys = new UserKeys(context.user.id);
+export const main = createProtectedHandler<Params>(
+  async (event, context) => {
+    const userKeys = new UserKeys(context.user.id);
 
-  const todo = new Todo(
-    { id: ulid(), completed: false, title: event.body.title },
-    userKeys
-  );
+    const todo = new Todo(
+      { id: ulid(), completed: false, title: event.body.title },
+      userKeys
+    );
 
-  try {
-    const newTodo = await createTodo(todo);
+    try {
+      const newTodo = await createTodo(todo);
 
-    return httpResponse({
-      todo: newTodo,
-    });
-  } catch (e) {
-    return httpError(e);
-  }
+      return httpResponse({
+        todo: newTodo,
+      });
+    } catch (e) {
+      return httpError(e);
+    }
 });
 
 main.use([
