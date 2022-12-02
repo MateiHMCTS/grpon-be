@@ -6,5 +6,6 @@ export interface Environment {
   dynamo: {
     endpoint?: string;
     tableName: string;
+    connectionsTableName?: string;
   };
 }

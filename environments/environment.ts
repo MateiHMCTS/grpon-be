@@ -8,5 +8,6 @@ export const env: Environment = {
   dynamo: {
     endpoint: 'http://localhost:4566',
     tableName: `dev-AppTable`,
+    connectionsTableName: `dev-AppConnections`
   },
 };

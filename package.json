@@ -29,8 +29,6 @@
     "cfn-resolver-lib": "1.1.7",
     "jsonwebtoken": "8.5.1",
     "middy": "0.36.0",
-    "serverless-appsync-plugin": "^1.14.0",
-    "serverless-appsync-simulator": "^0.20.0",
     "tslib": "2.0.0",
     "ulid": "2.3.0",
     "yup": "0.32.11"
