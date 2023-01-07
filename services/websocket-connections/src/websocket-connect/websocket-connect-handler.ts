@@ -6,19 +6,40 @@ import {
 } from "../websocket-connection.model";
 import { UserKeys } from "@app/users/user.model";
 import { createProtectedWebsocketHandler } from "../shared/websocket.handler";
+import { createTodo, Todo } from "../../../todos/src/todo.model";
+import { ulid } from "ulid";
+import { web } from "webpack";
+import { ApiGatewayManagementApi } from "aws-sdk";
+import { env } from "@app/env";
 
 export const main = createProtectedWebsocketHandler(async (event, context) => {
   const { body, requestContext: { connectionId, routeKey }} = event;
   const userKeys = new UserKeys(context.user.id);
-  const websocketConnection = new WebsocketConnection({ websocketConnectionId: connectionId}, userKeys);
+  const websocketConnection = new WebsocketConnection(
+    { id: ulid(), connectionId },
+    userKeys
+  );
 
   try {
-    console.log('trying to create...');
-    const result = await createWebsocketConnection(websocketConnection);
-    // console.log(result);
-    //TODO: why isn't created being output?
-    console.log('created');
-    return httpResponse({item: '123'});
+    const newWebsocketConnection = await createWebsocketConnection(websocketConnection);
+  //   const apiGateway = new ApiGatewayManagementApi({
+  //     apiVersion: '2018-11-29',
+  //     endpoint: env.websocketUrl,
+  //   });
+  // console.log('connected!!!', connectionId);
+  //   await apiGateway
+  //     .postToConnection({
+  //       ConnectionId: connectionId,
+  //       Data: JSON.stringify({
+  //         success: '123123',
+  //       }),
+  //     })
+  //     .promise().catch(error => {
+  //       console.log(error);
+  //     });
+  //
+  //   console.log('asdfasfda');
+    return;
   } catch (e) {
     return httpError(e);
   }

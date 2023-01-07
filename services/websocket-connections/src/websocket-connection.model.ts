@@ -1,3 +1,5 @@
+// @ts-ignore
+
 import { Item, ItemKeys } from '@app/db/item';
 import { DynamoDB } from 'aws-sdk';
 import { createItem } from "@app/db/operations";
@@ -7,7 +9,8 @@ import { getClient } from "@app/db/client";
 import { dbErrorLogger } from "@app/db/errors";
 
 export interface WebsocketConnectionModel {
-  websocketConnectionId: string;
+  id: string;
+  connectionId: string;
 }
 
 export class WebsocketConnectionKeys extends ItemKeys {
@@ -32,12 +35,13 @@ export class WebsocketConnection extends Item<WebsocketConnectionModel> {
   }
 
   get keys() {
-    return new WebsocketConnectionKeys(this.websocketConnection.websocketConnectionId, this.userKeys);
+    return new WebsocketConnectionKeys(this.websocketConnection.id, this.userKeys);
   }
 
   static fromItem(attributeMap: DynamoDB.AttributeMap): WebsocketConnectionModel {
     return {
-      websocketConnectionId: attributeMap.connectionId.S,
+      id: attributeMap.id.S,
+      connectionId: attributeMap.connectionId.S,
     };
   }
 
@@ -47,10 +51,7 @@ export class WebsocketConnection extends Item<WebsocketConnectionModel> {
 }
 
 export async function createWebsocketConnection(websocketConnection: WebsocketConnection): Promise<WebsocketConnectionModel> {
-  // @ts-expect-error -- need to change db table name for websocket connections
-  await createItem(websocketConnection, {TableName: env.dynamo.connectionsTableName});
-  console.log('after created Item',  WebsocketConnection.fromItem(websocketConnection.toItem()));
-  console.log();
+  await createItem(websocketConnection);
   return WebsocketConnection.fromItem(websocketConnection.toItem());
 }
 
@@ -77,6 +78,10 @@ export async function deleteWebsocketConnection(websocketConnectionId: string): 
   }
   return;
 }
+
+/**
+ * @ts-expect-error -- need to change db table name for websocket connections
+ */
 
 // export async function getWebsocketConnection(websocketConnectionKeys: WebsocketConnectionKeys) {
 //   const result = await getItem(websocketConnectionKeys);
