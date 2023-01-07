@@ -6,6 +6,7 @@
     "db": "libs/db",
     "http": "libs/http",
     "todos": "services/todos",
-    "users": "services/users"
+    "users": "services/users",
+    "websocket-connections": "services/websocket-connections"
   }
 }

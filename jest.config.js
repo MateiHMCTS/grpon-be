@@ -6,5 +6,6 @@ module.exports = {
     '<rootDir>/services/auth',
     '<rootDir>/libs/db',
     '<rootDir>/services/users',
+    '<rootDir>/services/websocket-connections',
   ],
 };

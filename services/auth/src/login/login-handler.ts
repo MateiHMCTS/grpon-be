@@ -12,7 +12,7 @@ export const main = createHandler<Params>(async (event) => {
   const { email } = event.body;
 
   try {
-    const userKeys = new UserKeys(email);
+    const userKeys = new UserKeys(email.toLowerCase());
     const user = await getUser(userKeys);
 
     return httpResponse({

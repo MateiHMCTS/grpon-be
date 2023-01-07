@@ -8,4 +8,5 @@ export interface Environment {
     tableName: string;
     connectionsTableName?: string;
   };
+  websocketUrl: string;
 }

@@ -10,4 +10,5 @@ export const env: Environment = {
     tableName: `dev-AppTable`,
     connectionsTableName: `dev-AppConnections`
   },
+  websocketUrl: 'http://localhost:3999',
 };

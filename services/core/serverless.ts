@@ -49,6 +49,10 @@ const serverlessConfig: Partial<Serverless> = {
           ProvisionedThroughput: {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1
+          },
+          TimeToLiveSpecification: {
+            AttributeName: "ttl",
+            Enabled: true
           }
         }
       },
@@ -58,24 +62,32 @@ const serverlessConfig: Partial<Serverless> = {
           TableName: env.dynamo.connectionsTableName,
           AttributeDefinitions: [
             {
-              AttributeName: "connectionId",
+              AttributeName: "PK",
+              AttributeType: "S"
+            },
+            {
+              AttributeName: "SK",
               AttributeType: "S"
             }
           ],
           BillingMode: "PAY_PER_REQUEST",
           KeySchema: [
             {
-              AttributeName: "connectionId",
+              AttributeName: "PK",
               KeyType: "HASH"
+            },
+            {
+              AttributeName: "SK",
+              KeyType: "RANGE"
             }
           ],
           SSESpecification: {
             SSEEnabled: true
           },
-          TimeToLiveSpecification: {
-            AttributeName: "ttl",
-            Enabled: true
-          }
+          // TimeToLiveSpecification: {
+          //   AttributeName: "ttl",
+          //   Enabled: true
+          // }
         }
       }
     },

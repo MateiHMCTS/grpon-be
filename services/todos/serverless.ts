@@ -6,7 +6,6 @@ import { baseServerlessConfig } from '../../serverless.base';
 const serverlessConfig: Partial<Serverless> = {
   ...baseServerlessConfig,
   service: `todos`,
-  plugins: ['serverless-appsync-plugin','serverless-esbuild', 'serverless-appsync-simulator', 'serverless-offline'],
   provider: {
     ...baseServerlessConfig.provider,
     iam: {
@@ -78,6 +77,15 @@ const serverlessConfig: Partial<Serverless> = {
         },
       ],
     },
+    'validate-todo': {
+      handler: 'src/validate-todo/validate-todo-handler.main',
+      events: [{
+        http: {
+          method: 'post',
+          path: 'validate-todo'
+        }
+      }]
+    }
   },
 };
 
