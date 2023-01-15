@@ -1,8 +1,6 @@
-// @ts-ignore
-
 import { Item, ItemKeys } from '@app/db/item';
 import { DynamoDB } from 'aws-sdk';
-import { createItem } from "@app/db/operations";
+import { createItem, getItem } from "@app/db/operations";
 import { env } from "@app/env";
 import { UserKeys } from "@app/users/user.model";
 import { getClient } from "@app/db/client";
@@ -25,8 +23,12 @@ export class WebsocketConnectionKeys extends ItemKeys {
   }
 
   get sk() {
-    return `${WebsocketConnectionKeys.ENTITY_TYPE}#${this.websocketConnectionId}`;
+    return this.pk;
   }
+
+  // get sk() {
+  //   return `${WebsocketConnectionKeys.ENTITY_TYPE}#${this.websocketConnectionId}`;
+  // }
 }
 
 export class WebsocketConnection extends Item<WebsocketConnectionModel> {
@@ -51,7 +53,8 @@ export class WebsocketConnection extends Item<WebsocketConnectionModel> {
 }
 
 export async function createWebsocketConnection(websocketConnection: WebsocketConnection): Promise<WebsocketConnectionModel> {
-  await createItem(websocketConnection);
+  // @ts-expect-error - Different TableName required
+  await createItem(websocketConnection, { TableName: env.dynamo.connectionsTableName });
   return WebsocketConnection.fromItem(websocketConnection.toItem());
 }
 
@@ -64,7 +67,7 @@ export async function deleteWebsocketConnection(websocketConnectionId: string): 
         TableName: env.dynamo.connectionsTableName,
         Key: {
           "websocketConnectionId": {
-            "N" : websocketConnectionId.toString()
+            "S" : websocketConnectionId.toString()
           }
         },
       })
@@ -83,10 +86,31 @@ export async function deleteWebsocketConnection(websocketConnectionId: string): 
  * @ts-expect-error -- need to change db table name for websocket connections
  */
 
-// export async function getWebsocketConnection(websocketConnectionKeys: WebsocketConnectionKeys) {
-//   const result = await getItem(websocketConnectionKeys);
-//
-//   return WebsocketConnection.fromItem(result.Item);
-// }
+export async function getLastWebsocketConnectionByUserKey(userKeys: UserKeys) {
+  const { db } = getClient();
+
+  try {
+    const result = await db
+      .getItem({
+        TableName: env.dynamo.connectionsTableName,
+        Key: {
+          PK: { S: userKeys.pk },
+          SK: { S: userKeys.pk },
+        },
+      })
+      .promise();
+
+    // const result = await getItem(userKeys, { env.dynamo.connectionsTableName);
+
+    return WebsocketConnection.fromItem(result.Item);
+  } catch (e) {
+    dbErrorLogger(e);
+
+    throw {
+      success: false,
+    };
+  }
+  return;
+}
 
 

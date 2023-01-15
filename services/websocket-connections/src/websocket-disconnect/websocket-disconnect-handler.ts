@@ -3,7 +3,7 @@ import { deleteWebsocketConnection } from "../websocket-connection.model";
 
 export const main = createHandler(async (event, context) => {
   const { body, requestContext: { connectionId, routeKey }} = event;
-
+  console.log('deleted Item');
   try {
     await deleteWebsocketConnection(connectionId);
 

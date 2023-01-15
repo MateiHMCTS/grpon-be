@@ -13,8 +13,10 @@ export function authMiddleware(): middy.MiddlewareObj<
     APIGatewayProxyEvent,
     APIGatewayProxyResult
   > = async (request) => {
-    const authHeader = request.event.headers['Authorization'];
-
+    // Headers should be case-insensitive as per spec
+    const authHeader = request.event.headers['Authorization'] || request.event.headers['authorization'];
+    console.log(request.event.headers);
+    console.log(authHeader);
     if (authHeader) {
       const token = authHeader.split(' ')[1];
 

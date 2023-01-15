@@ -2,6 +2,7 @@ import type { Serverless } from 'serverless/aws';
 import { baseServerlessConfig } from '../../serverless.base';
 import { connectionsTableResource, tableResource } from "../../environments/environment.serverless";
 
+// @ts-nocheck
 const serverlessConfig: Partial<Serverless> = {
   ...baseServerlessConfig,
   service: 'websocket-connections',
@@ -53,16 +54,17 @@ const serverlessConfig: Partial<Serverless> = {
         }
       ]
     },
-    'websocket-validate': {
-      handler: 'src/websocket-validate/websocket-validate-handler.main',
-      events: [{
-        http: {
-          method: 'post',
-          path: 'validate'
-        }
-      }]
-    }
   },
 };
+
+serverlessConfig.functions['websocket-get-connection-id'] = {
+  "handler": "src/websocket-get-connection-id/websocket-get-connection-id-handler.main",
+  "events": [
+    {
+      // @ts-ignore
+      "websocket": "$default"
+    }
+  ]
+}
 
 module.exports = serverlessConfig;

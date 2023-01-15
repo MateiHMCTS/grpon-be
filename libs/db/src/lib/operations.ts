@@ -10,7 +10,7 @@ export async function createItem<T extends Item<any>>(
   const { TableName, db } = getClient();
 
   try {
-    const dbItemPromise = await db
+    return await db
       .putItem({
         TableName,
         Item: item.toItem(),
@@ -18,8 +18,6 @@ export async function createItem<T extends Item<any>>(
         ...options,
       })
       .promise();
-
-    return dbItemPromise;
   } catch (e) {
     dbErrorLogger(e);
 

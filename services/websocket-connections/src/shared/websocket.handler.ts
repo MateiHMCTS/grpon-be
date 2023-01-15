@@ -14,7 +14,6 @@ function websocketAuthMiddleware(): middy.MiddlewareObj<
     APIGatewayProxyEvent,
     APIGatewayProxyResult
     > = async (request) => {
-    console.log(request);
     const secWebsocketProtocolToken = request.event.headers['Sec-WebSocket-Protocol'];
 
     if (secWebsocketProtocolToken) {
